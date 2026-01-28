@@ -128,33 +128,43 @@ class RowSpanTable extends Table {
     }
 }
 
+// -------------------- Colspan táblázat és gomb -------------------- //
+
 const colSpanTable = new ColspanTable(colspanHeaderArr);
+
+const buttonCol = document.createElement("button");
+buttonCol.innerText = "HOZZÁADÁS";
+document.body.appendChild(buttonCol);
+buttonCol.addEventListener("click", buttonColEventListener.bind(colSpanTable));
+
+
+// -------------------- Rowspan táblázat és gomb -------------------- //
+
 const rowSpanTable = new RowSpanTable(rowspanHeaderArr);
 colSpanTable.render(colspanBodyArr);
 rowSpanTable.render(rowspanBodyArr);
 
-const button = document.createElement("button");
-button.innerText = "HOZZÁADÁS";
-document.body.appendChild(button);
+const buttonRow = document.createElement("button");
+buttonRow.innerText = "HOZZÁADÁS";
+document.body.appendChild(buttonRow);
+buttonRow.addEventListener("click", buttonRowEventListener.bind(rowSpanTable));
 
-button.addEventListener("click", buttonEventListener.bind(rowSpanTable));
 
 /**
  * @this {rowSpanTable}
  */
-function buttonEventListener() {
+function buttonColEventListener() {
     /**
-     * @type {RowspanRowType}
+     * @type {colspanRowType}
      */
     const obj = {
         author: "Teszt szerző",
         title1: "Teszt cím", 
         concepts1: "Teszt fogalom 1", 
-        title2: "Teszt cím 2",
         concepts2: "Teszt fogalom 2"
     }
 
-    rowSpanTable.method(function(body) {
+    colSpanTable.method(function(body) {
         const row = document.createElement("tr");
 
         const tdAuthor = document.createElement("td");
@@ -170,9 +180,55 @@ function buttonEventListener() {
         row.appendChild(tdConcept1);
         
         const tdConcept2 = document.createElement("td");
-        tdAuthor.innerText = obj.concepts2;
+        tdConcept2.innerText = obj.concepts2;
         row.appendChild(tdConcept2);
 
         body.appendChild(row);
+    })
+}
+
+
+/**
+ * @this {rowSpanTable}
+ */
+function buttonRowEventListener() {
+    /**
+     * @type {RowspanRowType}
+     */
+    const obj = {
+        author: "Teszt szerző",
+        title1: "Teszt cím", 
+        concepts1: "Teszt fogalom 1", 
+        title2: "Teszt cím 2",
+        concepts2: "Teszt fogalom 2"
+    }
+
+    rowSpanTable.method(function(body) {
+        const row1 = document.createElement("tr");
+        const row2 = document.createElement("tr");
+
+        const tdAuthor = document.createElement("td");
+        tdAuthor.innerText = obj.author;
+        row1.appendChild(tdAuthor);
+        tdAuthor.rowSpan = 2;
+        
+        const tdTitle1 = document.createElement("td");
+        tdTitle1.innerText = obj.title1;
+        row1.appendChild(tdTitle1);
+        
+        const tdConcept1 = document.createElement("td");
+        tdConcept1.innerText = obj.concepts1;
+        row1.appendChild(tdConcept1);
+        
+        const tdTitle2 = document.createElement("td");
+        tdTitle2.innerText = obj.title2;
+        row2.appendChild(tdTitle2);
+        
+        const tdConcept2 = document.createElement("td");
+        tdConcept2.innerText = obj.concepts2;
+        row2.appendChild(tdConcept2);
+
+        body.appendChild(row1);
+        body.appendChild(row2);
     })
 }
