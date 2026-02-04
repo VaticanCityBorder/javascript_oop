@@ -9,4 +9,12 @@ function muveletLetrehoz(jel) {
     if (jel == "+") {
         return (egyik, masik) => egyik + masik;
     }
+
+    else if (jel == "-") {
+        return (egyik, masik) => egyik - masik;
+    }
+
+    else if (jel == "*") {
+        return (egyik, masik) => egyik * masik;
+    }
 }
