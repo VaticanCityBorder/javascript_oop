@@ -5,6 +5,7 @@
  */
 
 import { FormView } from "./form.js";
+import { ImportView } from "./importexport.js";
 import { AuthorManager } from "./manager.js";
 import { NavigationBar } from "./navigationBar.js"
 import { TableView } from "./table.js";
@@ -40,4 +41,7 @@ const formView = new FormView("tableForm", formFields, manager);
 formView.appendTo(document.body);
 navbar.addViewElement("Form", formView);
 
+const importExport = new ImportView("importexport", manager);
+importExport.appendTo(document.body);
+navbar.addViewElement("Import/Export", importExport);
 navbar.activate("table");

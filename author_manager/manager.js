@@ -6,6 +6,10 @@
  * @callback AddElementResultCallback
  * @param {string} message
  * @returns {void}
+ * 
+ * @callback ImportResultCallback
+ * @param {string} message
+ * @returns {void}
  */
 
 class AuthorManager{
@@ -32,6 +36,10 @@ class AuthorManager{
         this.#addElementResultCallback = value;
     }
 
+    set TableCallback(value) {
+        this.#tableCallback = value;
+    }
+
     constructor(){
         this.#authorList = [];
     }
@@ -56,10 +64,40 @@ class AuthorManager{
     }
 
     /**
+     * @param {import(".").AuthorType[]} elementList
+     */
+    addElementList(elementList) {
+        for (const elem of elementList) {
+            const author = new Author();
+            author.id = this.#authorList.length;
+            author.name = element.author;
+            author.work = element.work;
+            author.concept = element.concept;
+
+            if (author.validate()) {
+                this.#authorList.push(author);
+                this.#addElementResultCallback("Sikeres elemfelvétel");
+            }
+            else {
+                this.#addElementResultCallback("Sikertelen elemfelvétel");
+                break;
+            }
+        }
+    }
+
+    /**
      * @returns {void}
      */
     getAllElement(){
         this.#tableCallback(this.#authorList);
+    }
+
+    getExportString() {
+        const result = [];
+        for (const author of this.#authorList) {
+            result.push(`$(author.name);$(author.work);$(author.concept)`);
+        }
+        return result.join("\n");
     }
 }
 
