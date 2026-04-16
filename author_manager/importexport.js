@@ -2,11 +2,17 @@ import { AuthorManager } from "./manager.js";
 import { ViewElement } from "./viewElement.js";
 
 class ImportView extends ViewElement {
+
     /**
      * @type {AuthorManager}
      */
     #manager;
 
+    /**
+     * 
+     * @param {string} id 
+     * @param {AuthorManager} manager 
+     */
     constructor(id, manager) {
         super(id);
         this.#manager = manager;
@@ -14,19 +20,23 @@ class ImportView extends ViewElement {
         fileInput.type = "file";
         this.div.appendChild(fileInput);
         const resultDiv = document.createElement("div");
-        
-        // Hiányzik pár sor...
-        
-        fileInput.type = "file";
+        this.div.appendChild(resultDiv);
+        this.#manager.importResultCallback = (message) => {
+            resultDiv.innerText = message;
+            setTimeout(() => {
+                resultDiv.innerText = "";
+            }, 1500);
+        }
         fileInput.addEventListener("change", (e) => {
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.readAsText(file, "UTF-8");
+
             reader.onload = () => {
                 /**
                  * @type {import("./index.js").AuthorType[]}
                  */
-                const result = []
+                const result = [];
                 const fileContent = reader.result;
                 const fileContentLines = fileContent.split("\n");
                 for (const line of fileContentLines) {
@@ -40,10 +50,11 @@ class ImportView extends ViewElement {
                         concept: data[2]
                     };
                     result.push(authorType);
-                    this.#manager.addElementList(result);
                 }
+                this.#manager.addElementList(result);
             }
         })
+
         const exportButton = document.createElement("button");
         exportButton.innerText = "Export";
         this.div.appendChild(exportButton);
@@ -60,4 +71,4 @@ class ImportView extends ViewElement {
     }
 }
 
-export {ImportView}
+export { ImportView }
